@@ -1,0 +1,68 @@
+openapi: 3.1.0    # версия формата
+info:             # общая информация
+  description: This is a simple API website with recipes      # описание
+  version: "1.0.0"			     # версия вашего API
+  title: Recipes            # название сервиса
+  contact:                               # ваши контакты
+    email: rex.kudimov@mail.ru
+  license:                               # лицензия
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:                                   # методы вашего API
+  /dishes:                            # путь к методу
+    get:                                 # поддерживаемый HTTP-метод
+      tags:                              # тэги этого метода
+        — dishes
+      operationId: ListDishes       # служебное значение
+      description: 'List of dishes'                     # описание
+      parameters: []                        # параметры
+      responses:                   # возможные ответы сервера по статусам
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dish'
+        '400':
+          description: bad input parameter
+    post:                          # ещё один HTTP-метод
+      tags:
+        — dishes
+      summary: adds an inventory item
+      operationId: addDish
+      description: Adds an item to the system
+      responses:
+        '201':
+          description: item created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: an existing item already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Dish'
+        description: Inventory item to add
+components:                # компоненты: к ним можно обращаться через $ref
+  schemas:
+    Dish:
+      type: object
+      required:
+        — id
+        — name
+        - recipe
+        - category
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          example: Widget Adapter
+        recipe:
+          type: text
+        category:
+          type: string
