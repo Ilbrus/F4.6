@@ -19,17 +19,27 @@ CATEGORIES = (
 )
 
 
-class Dish(models.Model):
-    name = models.CharField(max_length=255)
-    photo = models.ImageField(upload_to='images/', default=None)
-    category = models.CharField(max_length=14, choices=CATEGORIES, default=soups)
-    description = models.TextField()
+class Category(models.Model):
+     name = models.CharField(max_length=50)
 
-    def __str__(self):
-        return f'{self.name}'
+     def __str__(self):
+         return self.name
+
+class Dish(models.Model):
+     name = models.CharField(max_length=255)
+     photo = models.ImageField(upload_to='images/', default=None)
+     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+     description = models.TextField()
+
+     def __str__(self):
+         return f'{self.name}'
 
 
 class Step(models.Model):
-    description = models.TextField()
-    dish = models.ForeignKey(Dish, on_delete=models.CASCADE)
-    photo = models.ImageField(upload_to='images/', default=None)
+     description = models.TextField()
+     dish = models.ForeignKey(Dish, on_delete=models.CASCADE)
+     order = models.IntegerField()
+     photo = models.ImageField(upload_to='images/', default=None)
+
+     def __str__(self):
+         return f'{self.description} ({self.dish})'
